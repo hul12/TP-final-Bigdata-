@@ -21,14 +21,22 @@ public class RelationshipRecordReader extends RecordReader<LongWritable, Relatio
     public boolean nextKeyValue() throws IOException, InterruptedException {
         boolean hasNext = lineRecordReader.nextKeyValue();
         if (hasNext) {
+            // If the input split `hasNext` (i.e. has more data to read),
+            // we will set the current key to the line number
+            // and the current value to an ad-hoc Relationship object.
+
+            // The framework will automatically, thanks to the
+            // `getCurrentKey` and `getCurrentValue` methods defined below,
+            // get the necessary data to inject into the mapper at the right time.
+
+            // Read line number from `lineRecordReader` and update current key
             currentKey.set(lineRecordReader.getCurrentKey().get());
-            String line = lineRecordReader.getCurrentValue().toString();
-            // Supposons que chaque ligne soit sous la forme "id1,id2"
-            String[] ids = line.split(",");
-            if (ids.length == 2) {
-                currentValue.setId1(ids[0]);
-                currentValue.setId2(ids[1]);
-            }
+
+            // TODO: Your code here
+            // Read line data and update current value
+            // HINT: What methods can you call on `lineRecordReader`?
+            currentValue.setId1(lineRecordReader.getCurrentValue().toString().substring(0, lineRecordReader.getCurrentValue().toString().indexOf('<')));
+            currentValue.setId2(lineRecordReader.getCurrentValue().toString().substring(lineRecordReader.getCurrentValue().toString().indexOf('>')+1, lineRecordReader.getCurrentValue().toString().indexOf(',')));
         }
         return hasNext;
     }

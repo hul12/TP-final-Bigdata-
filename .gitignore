@@ -2,3 +2,5 @@
 .DS_Store
 target/
 *.jar
+!tpfinal-erwan-sorroche-job1.jar
+!tpfinal-erwan-sorroche-job2.jar
